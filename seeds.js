@@ -26,11 +26,46 @@ Thread.remove({}, function(err, results) {
         {name: "YOLO", creator: tracy, creatorName: tracy.name},
         {name: "Think Different", creator: samaki, creatorName: samaki.name}
         ],
-        function(err, thread) {    //call out function to display errors & results
+        function(err, threads) {    //call out function to display errors & results
           if (err) console.log(err); // if there's an error, it will display error in terminal
-          console.log(thread); // if there's no error, it will display results in terminal
+          // console.log(thread); // if there's no error, it will display results in terminal
 
-          mongoose.connection.close();
+          // add some posts
+          var yolo = threads[0];
+
+          yolo.posts.push({
+            author: tracy,
+            title: "I could of been better than Kobe",
+            body: "Yadidimean?!"
+          });
+
+          yolo.posts.push({
+            author: samaki,
+            title: "I could of been better than Luke",
+            body: "?!"
+          });
+
+
+
+          yolo.save(function(err, results){
+            // console.log(err)
+            // console.log(results)
+
+
+            var post = yolo.posts[0];
+
+            post.comments.push({
+              author: samaki,
+              body: "HI no ring"
+            });
+
+            yolo.save(function(err, resutls){
+              console.log(err);
+              console.log(results)
+              mongoose.connection.close();
+            });
+          });
+
       });
     });
   });
